@@ -31,6 +31,10 @@ on:
   push:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test:
     name: Run Unit Tests and Registry Login
@@ -67,14 +71,14 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
+          password: ${{ secrets.REGISTRY_TOKEN || secrets.GITHUB_TOKEN }}
 ```
 
 4. PHAN TICH BUOC DANG NHAP REGISTRY
 - Action docker/login-action@v3: Day la action chinh thuc tu Docker giup cau hinh Docker daemon tren runner de xac thuc an toan voi cac Container Registry.
 - Tham so registry: ghcr.io (Dia chi GitHub Container Registry).
 - Tham so username: ${{ github.actor }} (Bien moi truong tu dong chua username cua tai khoan kich hoat workflow).
-- Tham so password: ${{ secrets.REGISTRY_TOKEN }} (Lay gia tri token tu kho Repository Secrets, GitHub Actions tu dong che gia tri (masking) trong toan bo log console de ngan chan ro ri thong tin).
+- Tham so password: ${{ secrets.REGISTRY_TOKEN || secrets.GITHUB_TOKEN }} (Lay gia tri token tu kho Repository Secrets hoac GITHUB_TOKEN mac dinh co quyen packages: write, GitHub Actions tu dong che gia tri (masking) trong toan bo log console de ngan chan ro ri thong tin).
 
 5. HUONG DAN KIEM TRA XAC THUC
 - Day code len GitHub repository rikkei-devops-tmd/ss11-bt4.
